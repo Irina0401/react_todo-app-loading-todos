@@ -5,28 +5,29 @@ import { UserWarning } from './UserWarning';
 import { USER_ID } from './api/todos';
 import { useEffect, useState, useRef } from 'react';
 import { getTodos } from './api/todos';
-import { Todo } from './types/Todo';
+import { Todo, FilterType, ErrorMessage } from './types/Todo';
 
 export const App: React.FC = () => {
   const field = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState('');
-  const [filter, setFilter] = useState<'All' | 'Active' | 'Completed'>('All');
-  const [load, setLoad] = useState(false);
+  const [filter, setFilter] = useState<FilterType>('All');
+  const [loading, setLoading] = useState(false);
   const [todoTitle, setTodoTitle] = useState('');
 
   async function loadTodos() {
     setError('');
-    setLoad(true);
+    setLoading(true);
 
     try {
       const result = await getTodos();
+
       setTodos(result);
     } catch {
-      setError('Unable to load todos');
+      setError(ErrorMessage.UnableLoadTodos);
       setTimeout(() => setError(''), 3000);
     } finally {
-      setLoad(false);
+      setLoading(false);
     }
   }
 
@@ -68,7 +69,7 @@ export const App: React.FC = () => {
             type="button"
             className="todoapp__toggle-all active"
             data-cy="ToggleAllButton"
-            disabled={load}
+            disabled={loading}
           />
 
           <form>
@@ -79,8 +80,8 @@ export const App: React.FC = () => {
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
-              disabled={load}
-              onChange={(e) => setTodoTitle(e.target.value)}
+              disabled={loading}
+              onChange={e => setTodoTitle(e.target.value)}
             />
           </form>
         </header>
@@ -99,7 +100,7 @@ export const App: React.FC = () => {
                     type="checkbox"
                     className="todo__status"
                     checked={todo.completed}
-                    disabled={load}
+                    disabled={loading}
                   />
                 </label>
 
@@ -114,7 +115,8 @@ export const App: React.FC = () => {
         {filteredTodos.length > 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              {activeTodosCount} {activeTodosCount === 1 ? 'item' : 'items'} left
+              {activeTodosCount}
+              {activeTodosCount === 1 ? 'item' : 'items'} left
             </span>
 
             <nav className="filter" data-cy="Filter">
@@ -159,7 +161,7 @@ export const App: React.FC = () => {
           data-cy="HideErrorButton"
           type="button"
           className="delete"
-          disabled={load}
+          disabled={loading}
           onClick={() => setError('')}
         />
         {error}
