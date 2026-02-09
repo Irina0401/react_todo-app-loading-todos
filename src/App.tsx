@@ -58,6 +58,7 @@ export const App: React.FC = () => {
 
   const filteredTodos = getFilteredTodos();
   const activeTodosCount = todos.filter(todo => !todo.completed).length;
+  const itemLabel = activeTodosCount === 1 ? 'item' : 'items';
 
   return (
     <div className="todoapp">
@@ -107,17 +108,27 @@ export const App: React.FC = () => {
                 <span data-cy="TodoTitle" className="todo__title">
                   {todo.title}
                 </span>
+                <div data-cy="TodoLoader" className="modal overlay"></div>
+                <div className="modal-background has-background-white-ter" />
+                <div className="loader" />
+                <button
+                  type="button"
+                  className="todo__remove"
+                  data-cy="TodoDelete"
+                  disabled={loading}
+                >
+                  ×
+                </button>
               </div>
             ))}
           </section>
         )}
 
-        {filteredTodos.length > 0 && (
+        {todos.length > 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              {activeTodosCount}
-              {activeTodosCount === 1 ? 'item' : 'items'} left
-            </span>
+             {activeTodosCount} {itemLabel} left
+             </span>
 
             <nav className="filter" data-cy="Filter">
               <a
@@ -147,6 +158,14 @@ export const App: React.FC = () => {
                 Completed
               </a>
             </nav>
+            <button
+              type="button"
+              className="todoapp__clear-completed"
+              data-cy="ClearCompletedButton"
+              disabled={loading}
+            >
+              Clear completed
+            </button>
           </footer>
         )}
       </div>
