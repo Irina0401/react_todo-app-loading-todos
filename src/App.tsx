@@ -11,14 +11,13 @@ import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 
-
 export const App: React.FC = () => {
   const field = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState('');
   const [filter, setFilter] = useState<FilterType>(FilterType.All);
   const [loading, setLoading] = useState(false);
-
+  const [deletingIds] = useState<number[]>([]);
 
   async function loadTodos() {
     setError('');
@@ -70,30 +69,27 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-      <Header loading={loading} />
+        <Header loading={loading} />
         {filteredTodos.length > 0 && (
           <TodoList
-          todos={filteredTodos}
-          loading={loading}
-        />
+            todos={filteredTodos}
+            loading={loading}
+            deletingIds={deletingIds}
+          />
         )}
 
         {todos.length > 0 && (
-         <Footer
-         activeTodosCount={activeTodosCount}
-         itemLabel={itemLabel}
-         filter={filter}
-         setFilter={setFilter}
-         loading={loading}
-       />
+          <Footer
+            activeTodosCount={activeTodosCount}
+            itemLabel={itemLabel}
+            filter={filter}
+            setFilter={setFilter}
+            loading={loading}
+          />
         )}
       </div>
 
-       <ErrorNotification
-            error={error}
-            loading={loading}
-            setError={setError}
-        />
+      <ErrorNotification error={error} loading={loading} setError={setError} />
     </div>
   );
 };

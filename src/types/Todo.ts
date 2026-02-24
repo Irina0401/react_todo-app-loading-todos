@@ -6,9 +6,9 @@ export interface Todo {
 }
 
 export enum FilterType {
- All = 'All',
- Active = 'Active',
- Completed = 'Completed',
+  All = 'All',
+  Active = 'Active',
+  Completed = 'Completed',
 }
 
 export enum ErrorMessage {

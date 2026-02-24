@@ -4,9 +4,7 @@ interface HeaderProps {
   loading: boolean;
 }
 
-export const Header: React.FC<HeaderProps> = ({
-  loading,
-}) => {
+export const Header: React.FC<HeaderProps> = ({ loading }) => {
   return (
     <header className="todoapp__header">
       <button
@@ -16,7 +14,7 @@ export const Header: React.FC<HeaderProps> = ({
         disabled={loading}
       />
 
-     <form>
+      <form>
         <input
           data-cy="NewTodoField"
           type="text"
